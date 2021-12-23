@@ -1,4 +1,4 @@
-package com.revature.project2backend.main;
+package com.revature.project2backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
