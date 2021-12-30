@@ -1,7 +1,5 @@
 package com.revature.project2backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,28 +11,34 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
-@JsonIgnoreProperties({"password"})
 public class User {
-
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@Column(nullable = false)
+	private Integer id;
+	
+	@Column (nullable = false)
 	private String firstName;
-
-	@Column(nullable = false)
+	
+	@Column (nullable = false)
 	private String lastName;
-
-	@Column(unique = true, nullable = false)
-	private String username;
-
-	@Column(nullable = false)
-	private String password;
-
-	@Column(unique = true, nullable = false)
+	
+	@Column (unique = true, nullable = false)
 	private String email;
-
-	private String profileImgPath;
-
+	
+	@Column (unique = true, nullable = false)
+	private String username;
+	
+	@Column (nullable = false)
+	@JsonProperty (access = JsonProperty.Access.WRITE_ONLY)
+	private String password;
+	
+	private String profileImagePath = "";
+	
+	public User (String firstName, String lastName, String email, String username, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
 }

@@ -1,4 +1,5 @@
 h2/
+logs.txt
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

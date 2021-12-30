@@ -11,14 +11,13 @@ import javax.persistence.*;
 @Data
 @Entity
 public class PostLike {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @OneToOne(optional = false)
-    private User creator;
-
-    @OneToOne(optional = false)
-    private Post post;
+	@Id
+	@GeneratedValue (strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	@OneToOne (optional = false)
+	private User creator;
+	
+	@OneToOne (optional = false)
+	private Post post;
 }
