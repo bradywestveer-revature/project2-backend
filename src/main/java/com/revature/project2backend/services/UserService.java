@@ -25,14 +25,7 @@ public class UserService {
 	}
 	
 	public User getUser (Integer id) {
-		User user = this.userRepo.findById (id).orElse (null);
-		
-		if (user == null) {
-			//todo throw NotFoundException
-			return null;
-		}
-		
-		return user;
+		return this.userRepo.findById (id).orElse (null);
 	}
 	
 	public User getUserByUsername (String username) {

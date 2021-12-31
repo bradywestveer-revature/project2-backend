@@ -33,13 +33,6 @@ public class UserController {
 			throw new InvalidValueException ("Error! Invalid user");
 		}
 		
-		//todo check for invalid format?
-	}
-	
-	@PostMapping
-	public ResponseEntity <JsonResponse> createUser (@RequestBody User user) throws InvalidValueException {
-		validateUser (user);
-		
 		if (userService.getUserByUsername (user.getUsername ()) != null) {
 			throw new InvalidValueException ("Error! Username already in use");
 		}
@@ -47,6 +40,13 @@ public class UserController {
 		if (userService.getUserByEmail (user.getEmail ()) != null) {
 			throw new InvalidValueException ("Error! Email already in use");
 		}
+		
+		//todo check for invalid format?
+	}
+	
+	@PostMapping
+	public ResponseEntity <JsonResponse> createUser (@RequestBody User user) throws InvalidValueException {
+		validateUser (user);
 		
 		this.userService.createUser (user);
 		
@@ -83,6 +83,10 @@ public class UserController {
 		
 		User user = userService.getUser (id);
 		
+		if (user == null) {
+			throw new InvalidValueException ("Error! User not found");
+		}
+		
 		user.setFirstName (body.getOrDefault ("firstName", user.getFirstName ()).toString ());
 		user.setLastName (body.getOrDefault ("lastName", user.getLastName ()).toString ());
 		user.setEmail (body.getOrDefault ("email", user.getEmail ()).toString ());
@@ -91,14 +95,6 @@ public class UserController {
 		user.setProfileImagePath (body.getOrDefault ("profileImagePath", user.getProfileImagePath ()).toString ());
 		
 		validateUser (user);
-		
-		if (userService.getUserByUsername (user.getUsername ()) != null) {
-			throw new InvalidValueException ("Error! Username already in use");
-		}
-		
-		if (userService.getUserByEmail (user.getEmail ()) != null) {
-			throw new InvalidValueException ("Error! Email already in use");
-		}
 		
 		this.userService.updateUser (user);
 		
