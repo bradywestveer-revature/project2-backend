@@ -39,4 +39,14 @@ public class UserService {
 	public void updateUser (User user) {
 		this.userRepo.save (user);
 	}
+
+	public User validateCredentials(String identifier, String password) {
+		User userFromRepo = this.userRepo.findByUsername(identifier);
+		if ( userFromRepo == null ) {
+			userFromRepo = this.userRepo.findByEmail(identifier);
+			if (userFromRepo == null) return null;	// We could not find either the given username or email
+		}
+		if (!userFromRepo.getPassword().equals(password)) return null;
+		return userFromRepo;
+	}
 }
