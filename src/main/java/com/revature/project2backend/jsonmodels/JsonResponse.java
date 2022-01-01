@@ -21,6 +21,10 @@ public class JsonResponse {
 		this (exception.getMessage (), false);
 	}
 	
+	public JsonResponse (Exception exception, String redirect) {
+		this (exception.getMessage (), false, null, redirect);
+	}
+	
 	public JsonResponse (String message, boolean success) {
 		this (message, success, null, null);
 	}

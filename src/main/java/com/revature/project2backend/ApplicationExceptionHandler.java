@@ -18,7 +18,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	
 	@ExceptionHandler
 	public ResponseEntity <JsonResponse> unauthorizedExceptionHandler (UnauthorizedException exception) {
-		return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (new JsonResponse (exception));
+		return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (new JsonResponse (exception, "/login"));
 	}
 	
 	@ExceptionHandler
