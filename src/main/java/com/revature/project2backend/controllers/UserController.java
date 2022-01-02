@@ -50,7 +50,7 @@ public class UserController {
 		
 		this.userService.createUser (user);
 		
-		return ResponseEntity.ok (new JsonResponse ("Created user", true, null, "login"));
+		return ResponseEntity.ok (new JsonResponse ("Created user", true, null, "/login"));
 	}
 	
 	@GetMapping
