@@ -32,6 +32,8 @@ public class UserService {
 		if (user == null) {
 			throw new NotFoundException ("User with id: " + id.toString () + " not found");
 		}
+		
+		return user;
 	}
 	
 	public User getUserByUsername (String username) {
