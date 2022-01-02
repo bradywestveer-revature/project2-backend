@@ -1,5 +1,6 @@
 package com.revature.project2backend.services;
 
+import com.revature.project2backend.exceptions.InvalidCredentialsException;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,26 @@ public class UserService {
 	public void updateUser (User user) {
 		this.userRepo.save (user);
 	}
-
-	public User validateCredentials(String identifier, String password) {
-		User userFromRepo = this.userRepo.findByUsername(identifier);
-		if ( userFromRepo == null ) {
-			userFromRepo = this.userRepo.findByEmail(identifier);
-			if (userFromRepo == null) return null;	// We could not find either the given username or email
+	
+	public User loginUser (String identifier, String password) throws InvalidCredentialsException {
+		User user = this.userRepo.findByUsername (identifier);
+		
+		//if no user was found with username
+		if (user == null) {
+			user = this.userRepo.findByEmail (identifier);
 		}
-		if (!userFromRepo.getPassword().equals(password)) return null;
-		return userFromRepo;
+		
+		//if no user was found with username or email
+		if (user == null) {
+			throw new InvalidCredentialsException ();
+		}
+		
+		if (user.getPassword ().equals (password)) {
+			return user;
+		}
+		
+		else {
+			throw new InvalidCredentialsException ();
+		}
 	}
 }

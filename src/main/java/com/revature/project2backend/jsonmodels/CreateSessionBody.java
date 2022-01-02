@@ -1,10 +1,9 @@
 package com.revature.project2backend.jsonmodels;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-public class CreateSessionDTO {
+public class CreateSessionBody {
     String identifier;
     String password;
 }

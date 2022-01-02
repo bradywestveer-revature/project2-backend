@@ -1,5 +1,6 @@
 package com.revature.project2backend;
 
+import com.revature.project2backend.exceptions.InvalidCredentialsException;
 import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
 import com.revature.project2backend.jsonmodels.JsonResponse;
@@ -19,6 +20,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	@ExceptionHandler
 	public ResponseEntity <JsonResponse> unauthorizedExceptionHandler (UnauthorizedException exception) {
 		return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (new JsonResponse (exception, "/login"));
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity <JsonResponse> invalidCredentialsExceptionHandler (InvalidCredentialsException exception) {
+		return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (new JsonResponse (exception));
 	}
 	
 	@ExceptionHandler
