@@ -32,7 +32,7 @@ public class User {
 	@JsonProperty (access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
-	private String profileImagePath = "";
+	private String profileImageUrl = "";
 	
 	public User (String firstName, String lastName, String email, String username, String password) {
 		this.firstName = firstName;

@@ -97,7 +97,7 @@ public class UserController {
 		user.setEmail (body.getOrDefault ("email", user.getEmail ()).toString ());
 		user.setUsername (body.getOrDefault ("username", user.getUsername ()).toString ());
 		user.setPassword (body.getOrDefault ("password", user.getPassword ()).toString ());
-		user.setProfileImagePath (body.getOrDefault ("profileImagePath", user.getProfileImagePath ()).toString ());
+		user.setProfileImageUrl (body.getOrDefault ("profileImageUrl", user.getProfileImageUrl ()).toString ());
 		
 		validateUser (user);
 		
