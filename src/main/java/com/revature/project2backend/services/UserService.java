@@ -5,11 +5,14 @@ import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
 	private final UserRepo userRepo;
 	
@@ -19,6 +22,8 @@ public class UserService {
 	}
 	
 	public void createUser (User user) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		this.userRepo.save (user);
 	}
 	
@@ -45,6 +50,8 @@ public class UserService {
 	}
 	
 	public void updateUser (User user) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		this.userRepo.save (user);
 	}
 	
@@ -60,12 +67,12 @@ public class UserService {
 		if (user == null) {
 			throw new InvalidCredentialsException ();
 		}
-		
-		if (user.getPassword ().equals (password)) {
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode(password);
+		if (passwordEncoder.matches(password, user.getPassword())) {
 			return user;
-		}
-		
-		else {
+		} else {
 			throw new InvalidCredentialsException ();
 		}
 	}
