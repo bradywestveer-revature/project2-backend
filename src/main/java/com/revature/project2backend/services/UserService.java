@@ -16,14 +16,16 @@ import java.util.List;
 public class UserService {
 	private final UserRepo userRepo;
 	
+	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder ();
+	
 	@Autowired
 	public UserService (UserRepo userRepo) {
 		this.userRepo = userRepo;
 	}
 	
 	public void createUser (User user) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword (passwordEncoder.encode (user.getPassword ()));
+		
 		this.userRepo.save (user);
 	}
 	
@@ -50,8 +52,8 @@ public class UserService {
 	}
 	
 	public void updateUser (User user) {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword (passwordEncoder.encode (user.getPassword ()));
+		
 		this.userRepo.save (user);
 	}
 	
@@ -67,12 +69,12 @@ public class UserService {
 		if (user == null) {
 			throw new InvalidCredentialsException ();
 		}
-
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String encodedPassword = passwordEncoder.encode(password);
-		if (passwordEncoder.matches(password, user.getPassword())) {
+		
+		if (passwordEncoder.matches (password, user.getPassword ())) {
 			return user;
-		} else {
+		}
+		
+		else {
 			throw new InvalidCredentialsException ();
 		}
 	}
