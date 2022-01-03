@@ -1,6 +1,7 @@
 package com.revature.project2backend.services;
 
 import com.revature.project2backend.exceptions.InvalidCredentialsException;
+import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,14 @@ public class UserService {
 		return this.userRepo.findAll ();
 	}
 	
-	public User getUser (Integer id) {
-		return this.userRepo.findById (id).orElse (null);
+	public User getUser (Integer id) throws NotFoundException {
+		User user = this.userRepo.findById (id).orElse (null);
+		
+		if (user == null) {
+			throw new NotFoundException ("User with id: " + id.toString () + " not found");
+		}
+		
+		return user;
 	}
 	
 	public User getUserByUsername (String username) {

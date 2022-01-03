@@ -1,6 +1,7 @@
 package com.revature.project2backend.controllers;
 
 import com.revature.project2backend.exceptions.InvalidValueException;
+import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
 import com.revature.project2backend.jsonmodels.JsonResponse;
 import com.revature.project2backend.models.User;
@@ -26,19 +27,19 @@ public class UserController {
 	
 	private void validateUser (User user) throws InvalidValueException {
 		if (user.getFirstName () == null || user.getLastName () == null || user.getEmail () == null || user.getUsername () == null || user.getPassword () == null) {
-			throw new InvalidValueException ("Error! Invalid user");
+			throw new InvalidValueException ("Invalid user");
 		}
 		
 		if (user.getFirstName ().trim ().equals ("") || user.getLastName ().trim ().equals ("") || user.getEmail ().trim ().equals ("") || user.getUsername ().trim ().equals ("") || user.getPassword ().trim ().equals ("")) {
-			throw new InvalidValueException ("Error! Invalid user");
+			throw new InvalidValueException ("Invalid user");
 		}
 		
 		if (userService.getUserByUsername (user.getUsername ()) != null) {
-			throw new InvalidValueException ("Error! Username already in use");
+			throw new InvalidValueException ("Username already in use");
 		}
 		
 		if (userService.getUserByEmail (user.getEmail ()) != null) {
-			throw new InvalidValueException ("Error! Email already in use");
+			throw new InvalidValueException ("Email already in use");
 		}
 		
 		//todo check for invalid format?
@@ -50,7 +51,7 @@ public class UserController {
 		
 		this.userService.createUser (user);
 		
-		return ResponseEntity.ok (new JsonResponse ("Created user", true, null, "login"));
+		return ResponseEntity.ok (new JsonResponse ("Created user", true, null, "/login"));
 	}
 	
 	@GetMapping
@@ -65,7 +66,7 @@ public class UserController {
 	}
 	
 	@GetMapping ("{id}")
-	public ResponseEntity <JsonResponse> getUser (@PathVariable Integer id, HttpSession httpSession) throws UnauthorizedException {
+	public ResponseEntity <JsonResponse> getUser (@PathVariable Integer id, HttpSession httpSession) throws UnauthorizedException, NotFoundException {
 		if (httpSession.getAttribute ("user") == null) {
 			throw new UnauthorizedException ();
 		}
@@ -74,17 +75,21 @@ public class UserController {
 	}
 	
 	@PutMapping ("{id}")
-	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody Map <String, Object> body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException {
+	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody Map <String, Object> body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {
 		User sessionUser = (User) httpSession.getAttribute ("user");
 		
-		if (sessionUser == null || !sessionUser.getId ().equals (id)) {
+		if (sessionUser == null) {
+			throw new NotFoundException ("User with id: " + id.toString () + " not found");
+		}
+		
+		if (!sessionUser.getId ().equals (id)) {
 			throw new UnauthorizedException ();
 		}
 		
 		User user = userService.getUser (id);
 		
 		if (user == null) {
-			throw new InvalidValueException ("Error! User not found");
+			throw new InvalidValueException ("User not found");
 		}
 		
 		user.setFirstName (body.getOrDefault ("firstName", user.getFirstName ()).toString ());

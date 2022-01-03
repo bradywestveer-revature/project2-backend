@@ -23,7 +23,7 @@ public class SessionController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createSession (HttpSession httpSession, @RequestBody CreateSessionBody body) throws InvalidCredentialsException {
+	public ResponseEntity <JsonResponse> createSession (@RequestBody CreateSessionBody body, HttpSession httpSession) throws InvalidCredentialsException {
 		User user = this.userService.loginUser (body.getIdentifier (), body.getPassword ());
 		
 		httpSession.setAttribute ("user", user);
@@ -35,6 +35,6 @@ public class SessionController {
 	public ResponseEntity <JsonResponse> deleteSession (HttpSession httpSession) {
 		httpSession.invalidate ();
 		
-		return ResponseEntity.ok (new JsonResponse ("Logged out", true, null, "login"));
+		return ResponseEntity.ok (new JsonResponse ("Logged out", true, null, "/login"));
 	}
 }

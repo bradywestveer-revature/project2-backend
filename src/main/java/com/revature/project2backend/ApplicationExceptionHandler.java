@@ -2,6 +2,7 @@ package com.revature.project2backend;
 
 import com.revature.project2backend.exceptions.InvalidCredentialsException;
 import com.revature.project2backend.exceptions.InvalidValueException;
+import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
 import com.revature.project2backend.jsonmodels.JsonResponse;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	@ExceptionHandler
 	public ResponseEntity <JsonResponse> invalidCredentialsExceptionHandler (InvalidCredentialsException exception) {
 		return ResponseEntity.status (HttpStatus.UNAUTHORIZED).body (new JsonResponse (exception));
+	}
+	
+	@ExceptionHandler
+	public ResponseEntity <JsonResponse> notFoundExceptionHandler (NotFoundException exception) {
+		return ResponseEntity.status (HttpStatus.NOT_FOUND).body (new JsonResponse (exception));
 	}
 	
 	@ExceptionHandler
