@@ -42,7 +42,13 @@ public class UserController {
 			throw new InvalidValueException ("Email already in use");
 		}
 		
-		//todo check for invalid format?
+		if (!user.getUsername ().matches ("[\\w-]+")) {
+			throw new InvalidValueException ("Invalid username");
+		}
+		
+		if (!user.getEmail ().matches ("[\\w-]+@[\\w-]+\\.[a-zA-z]+")) {
+			throw new InvalidValueException ("Invalid email");
+		}
 	}
 	
 	@PostMapping
