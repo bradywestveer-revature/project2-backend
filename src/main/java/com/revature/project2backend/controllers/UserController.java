@@ -98,12 +98,12 @@ public class UserController {
 			throw new InvalidValueException ("User not found");
 		}
 		
-		user.setFirstName (body.getOrDefault ("firstName", user.getFirstName ()).toString ());
-		user.setLastName (body.getOrDefault ("lastName", user.getLastName ()).toString ());
-		user.setEmail (body.getOrDefault ("email", user.getEmail ()).toString ());
-		user.setUsername (body.getOrDefault ("username", user.getUsername ()).toString ());
-		user.setPassword (body.getOrDefault ("password", user.getPassword ()).toString ());
-		user.setProfileImageUrl (body.getOrDefault ("profileImageUrl", user.getProfileImageUrl ()).toString ());
+		user.setFirstName ((String) body.getOrDefault ("firstName", user.getFirstName ()));
+		user.setLastName ((String) body.getOrDefault ("lastName", user.getLastName ()));
+		user.setEmail ((String) body.getOrDefault ("email", user.getEmail ()));
+		user.setUsername ((String) body.getOrDefault ("username", user.getUsername ()));
+		user.setPassword ((String) body.getOrDefault ("password", user.getPassword ()));
+		user.setProfileImageUrl ((String) body.getOrDefault ("profileImageUrl", user.getProfileImageUrl ()));
 		
 		validateUser (user);
 		

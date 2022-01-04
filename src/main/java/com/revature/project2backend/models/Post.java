@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +22,15 @@ public class Post {
 	
 	@Column (nullable = false)
 	private String body;
+	
+	@OneToMany
+	private List <PostImage> images;
+	
+	@OneToMany
+	private List <PostLike> likes;
+	
+	@OneToMany
+	private List <Comment> comments;
 	
 	@Column (nullable = false)
 	@Temporal (TemporalType.TIMESTAMP)

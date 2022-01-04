@@ -35,6 +35,8 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	
 	@ExceptionHandler
 	public ResponseEntity <JsonResponse> exceptionHandler (Exception exception) {
+		exception.printStackTrace ();
+		
 		return ResponseEntity.status (HttpStatus.INTERNAL_SERVER_ERROR).body (new JsonResponse (exception));
 	}
 }
