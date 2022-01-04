@@ -11,6 +11,11 @@ import javax.persistence.*;
 @Data
 @Entity
 public class PostImage {
+	public PostImage (String path, Post post) {
+		this.path = path;
+		this.post = post;
+	}
+	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;

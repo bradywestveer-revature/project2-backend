@@ -13,6 +13,12 @@ import java.util.List;
 @Data
 @Entity
 public class Post {
+	public Post (User creator, String body, Date created) {
+		this.creator = creator;
+		this.body = body;
+		this.created = created;
+	}
+	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;

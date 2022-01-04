@@ -83,11 +83,7 @@ public class PostController {
 			throw new UnauthorizedException ();
 		}
 		
-		Post post = new Post ();
-		
-		post.setCreator (user);
-		post.setBody ((String) body.getOrDefault ("body", null));
-		post.setCreated (new Date (System.currentTimeMillis ()));
+		Post post = new Post (user, (String) body.getOrDefault ("body", null), new Date (System.currentTimeMillis ()));
 		
 		validatePost (post);
 		
@@ -97,29 +93,28 @@ public class PostController {
 		
 		Object images = body.get ("images");
 		
-		if (!(images instanceof List <?>)) {
-			throw new InvalidValueException ("Invalid images");
-		}
-		
-		if (((List<?>) images).size () > 0 && !(((List<?>) images).get (0) instanceof String)) {
-			throw new InvalidValueException ("Invalid images");
-		}
-		
-		for (int i = 0; i < ((List<?>) images).size (); i++) {
-			PostImage postImage = new PostImage ();
+		if (images != null) {
+			if (!(images instanceof List <?>)) {
+				throw new InvalidValueException ("Invalid images");
+			}
 			
-			postImage.setPost (post);
-			postImage.setPath (S3Utilities.uploadImage ((String) ((List<?>) images).get (i)));
+			if (((List<?>) images).size () > 0 && !(((List<?>) images).get (0) instanceof String)) {
+				throw new InvalidValueException ("Invalid images");
+			}
 			
-			postImageService.createPostImage (postImage);
+			for (int i = 0; i < ((List<?>) images).size (); i++) {
+				PostImage postImage = new PostImage (S3Utilities.uploadImage ((String) ((List<?>) images).get (i)), post);
+				
+				postImageService.createPostImage (postImage);
+				
+				postImages.add (postImage);
+			}
 			
-			postImages.add (postImage);
+			post.setImages (postImages);
+			
+			//todo refactor
+			postService.updatePost (post);
 		}
-		
-		post.setImages (postImages);
-		
-		//todo refactor
-		postService.updatePost (post);
 		
 		return ResponseEntity.ok (new JsonResponse ("Created post", true));
 	}

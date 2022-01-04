@@ -38,7 +38,7 @@ public class PostService {
 	}
 	
 	public Post getPost (Integer id) {
-		return null;
+		return postRepo.findById (id).orElse (null);
 	}
 	
 	public void updatePost (Post post) {

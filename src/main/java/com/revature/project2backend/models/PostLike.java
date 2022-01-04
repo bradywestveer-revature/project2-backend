@@ -11,6 +11,11 @@ import javax.persistence.*;
 @Data
 @Entity
 public class PostLike {
+	public PostLike (Post post, User creator) {
+		this.post = post;
+		this.creator = creator;
+	}
+	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;
