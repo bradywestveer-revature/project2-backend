@@ -36,15 +36,11 @@ public class PostLikeController {
 			throw new UnauthorizedException ();
 		}
 		
-		//todo refactor do we have to check for null?
-		
 		if (createLikeBody.getPostId () == null) {
 			throw new InvalidValueException ("Invalid post ID");
 		}
 		
 		Post post = postService.getPost (createLikeBody.getPostId ());
-		
-		//todo refactor do we have to check for null?
 		
 		if (post == null) {
 			throw new InvalidValueException ("Invalid post ID");
@@ -70,11 +66,11 @@ public class PostLikeController {
 	
 	@DeleteMapping ("/{postId}")
 	public ResponseEntity <JsonResponse> deletePostLike (@PathVariable Integer postId, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
-		if (httpSession.getAttribute ("user") == null) {
+		User user = (User) httpSession.getAttribute ("user");
+		
+		if (user == null) {
 			throw new UnauthorizedException ();
 		}
-		
-		//todo refactor do we have to check for null?
 		
 		Post post = this.postService.getPost (postId);
 		
@@ -82,12 +78,20 @@ public class PostLikeController {
 			throw new InvalidValueException ("Invalid post ID");
 		}
 		
-//		post.getLikes ().remove ();
+		for (int i = 0; i < post.getLikes ().size (); i++) {
+			if (post.getLikes ().get (i).getCreator ().getId ().equals (user.getId ())) {
+				PostLike postLike = post.getLikes ().get (i);
+				
+				post.getLikes ().remove (postLike);
+				
+				this.postService.updatePost (post);
+				
+				this.postLikeService.deletePostLike (postLike);
+				
+				return ResponseEntity.ok (new JsonResponse ("Deleted like", true));
+			}
+		}
 		
-		this.postService.updatePost (post);
-		
-//		this.postLikeService.deletePostLike (postLike);
-		
-		return ResponseEntity.ok (new JsonResponse ("Deleted like", true));
+		throw new InvalidValueException ("Invalid post ID");
 	}
 }

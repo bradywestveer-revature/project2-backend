@@ -20,9 +20,9 @@ public class PostLike {
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@OneToOne (optional = false)
+	@ManyToOne (optional = false)
 	private User creator;
 	
-	@OneToOne (optional = false)
+	@ManyToOne (optional = false)
 	private Post post;
 }
