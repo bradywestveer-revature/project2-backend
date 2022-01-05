@@ -15,7 +15,7 @@ import java.util.List;
 public class PostService {
 	private final PostRepo postRepo;
 	
-	private final int postsPerPage = 5;
+	private final int postsPerPage = 20;
 	
 	@Autowired
 	public PostService (PostRepo postRepo) {
