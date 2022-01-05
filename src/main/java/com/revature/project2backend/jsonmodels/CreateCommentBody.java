@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateCommentBody {
-	Integer postId;
-	String body;
+	private Integer postId;
+	private String body;
 }

@@ -29,18 +29,18 @@ public class PostLikeController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createPostLike (@RequestBody CreateLikeBody createLikeBody, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
+	public ResponseEntity <JsonResponse> createPostLike (@RequestBody CreateLikeBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
 		User user = (User) httpSession.getAttribute ("user"); 
 		
 		if (user == null) {
 			throw new UnauthorizedException ();
 		}
 		
-		if (createLikeBody.getPostId () == null) {
+		if (body.getPostId () == null) {
 			throw new InvalidValueException ("Invalid post ID");
 		}
 		
-		Post post = postService.getPost (createLikeBody.getPostId ());
+		Post post = postService.getPost (body.getPostId ());
 		
 		if (post == null) {
 			throw new InvalidValueException ("Invalid post ID");

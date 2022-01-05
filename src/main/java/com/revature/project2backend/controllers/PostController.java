@@ -3,6 +3,7 @@ package com.revature.project2backend.controllers;
 import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
+import com.revature.project2backend.jsonmodels.CreatePostBody;
 import com.revature.project2backend.jsonmodels.JsonResponse;
 import com.revature.project2backend.models.*;
 import com.revature.project2backend.services.PostImageService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -61,7 +63,7 @@ public class PostController {
 		List <String> imageUrls = new ArrayList <> ();
 		
 		for (PostImage postImage : postData.getImages ()) {
-			imageUrls.add (S3Utilities.urlPrefix + postImage.getPath ());
+			imageUrls.add (S3Utilities.url + postImage.getPath ());
 		}
 		
 		post.put ("imageUrls", imageUrls);
@@ -94,16 +96,15 @@ public class PostController {
 		return post;
 	}
 	
-	//todo refactor use CreatePostBody instead of Map 
 	@PostMapping
-	public ResponseEntity <JsonResponse> createPost (@RequestBody Map <String, Object> body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
+	public ResponseEntity <JsonResponse> createPost (@RequestBody CreatePostBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException, IOException {
 		User user = (User) httpSession.getAttribute ("user");
 		
 		if (user == null) {
 			throw new UnauthorizedException ();
 		}
 		
-		Post post = new Post (user, (String) body.getOrDefault ("body", null), new Date (System.currentTimeMillis ()));
+		Post post = new Post (user, body.getBody (), new Date (System.currentTimeMillis ()));
 		
 		validatePost (post);
 		
@@ -111,19 +112,20 @@ public class PostController {
 		
 		List <PostImage> postImages = new ArrayList <> ();
 		
-		Object images = body.get ("images");
-		
-		if (images != null) {
-			if (!(images instanceof List <?>)) {
-				throw new InvalidValueException ("Invalid images");
-			}
-			
-			if (((List<?>) images).size () > 0 && !(((List<?>) images).get (0) instanceof String)) {
-				throw new InvalidValueException ("Invalid images");
-			}
-			
-			for (int i = 0; i < ((List<?>) images).size (); i++) {
-				PostImage postImage = new PostImage (S3Utilities.uploadImage ((String) ((List<?>) images).get (i)), post);
+		if (body.getImages () != null) {
+			for (int i = 0; i < body.getImages ().size (); i++) {
+				String imageData = body.getImages ().get (i).getOrDefault ("data", null);
+				String imageFileName = body.getImages ().get (i).getOrDefault ("fileName", null);
+				
+				if (imageData == null || imageFileName == null) {
+					continue;
+				}
+				
+				String path = System.currentTimeMillis () + String.valueOf (i) + user.getUsername () + imageFileName;
+				
+				S3Utilities.uploadImage (path, imageData);
+				
+				PostImage postImage = new PostImage (path, post);
 				
 				postImageService.createPostImage (postImage);
 				

@@ -40,21 +40,21 @@ public class CommentController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createComment (@RequestBody CreateCommentBody createCommentBody, HttpSession httpSession) throws InvalidValueException, UnauthorizedException {
+	public ResponseEntity <JsonResponse> createComment (@RequestBody CreateCommentBody body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException {
 		User user = (User) httpSession.getAttribute ("user");
 		
 		if (user == null) {
 			throw new UnauthorizedException ();
 		}
 		
-		Post post = this.postService.getPost (createCommentBody.getPostId ());
+		Post post = this.postService.getPost (body.getPostId ());
 		
 		//todo throw exception inside post
 		if (post == null) {
 			throw new InvalidValueException ("");
 		}
 		
-		Comment comment = new Comment (user, post, createCommentBody.getBody (), new Date (System.currentTimeMillis ()));
+		Comment comment = new Comment (user, post, body.getBody (), new Date (System.currentTimeMillis ()));
 		
 		validateComment (comment);
 		
