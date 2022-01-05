@@ -37,7 +37,7 @@ public class UserService {
 		User user = this.userRepo.findById (id).orElse (null);
 		
 		if (user == null) {
-			throw new NotFoundException ("User with id: " + id.toString () + " not found");
+			throw new NotFoundException ("User with id: " + id + " not found");
 		}
 		
 		return user;

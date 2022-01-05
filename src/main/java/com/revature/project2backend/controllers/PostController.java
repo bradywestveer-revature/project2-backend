@@ -1,14 +1,13 @@
 package com.revature.project2backend.controllers;
 
 import com.revature.project2backend.exceptions.InvalidValueException;
+import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
 import com.revature.project2backend.jsonmodels.JsonResponse;
-import com.revature.project2backend.models.Post;
-import com.revature.project2backend.models.PostImage;
-import com.revature.project2backend.models.PostLike;
-import com.revature.project2backend.models.User;
+import com.revature.project2backend.models.*;
 import com.revature.project2backend.services.PostImageService;
 import com.revature.project2backend.services.PostService;
+import com.revature.project2backend.services.UserService;
 import com.revature.project2backend.utilities.S3Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +22,13 @@ import java.util.*;
 public class PostController {
 	private final PostService postService;
 	private final PostImageService postImageService;
+	private final UserService userService;
 	
 	@Autowired
-	public PostController (PostService postService, PostImageService postImageService) {
+	public PostController (PostService postService, PostImageService postImageService, UserService userService) {
 		this.postService = postService;
 		this.postImageService = postImageService;
+		this.userService = userService;
 	}
 	
 	private void validatePost (Post post) throws InvalidValueException {
@@ -44,34 +45,53 @@ public class PostController {
 		List <Map <String, Object>> posts = new ArrayList <> ();
 		
 		for (Post postData : postList) {
-			Map <String, Object> post = new HashMap <> ();
-			
-			post.put ("id", postData.getId ());
-			post.put ("creatorId", postData.getCreator ().getId ());
-			post.put ("body", postData.getBody ());
-			
-			List <String> imageUrls = new ArrayList <> ();
-			
-			for (PostImage postImage : postData.getImages ()) {
-				imageUrls.add (S3Utilities.urlPrefix + postImage.getPath ());
-			}
-			
-			post.put ("imageUrls", imageUrls);
-			
-			Map <Integer, Integer> likes = new HashMap <> ();
-			
-			for (PostLike postLike : postData.getLikes ()) {
-				likes.put (postLike.getCreator ().getId (), postLike.getId ());
-			}
-			
-			post.put ("likes", likes);
-			
-			post.put ("comments", postData.getComments ());
-			
-			posts.add (post);
+			posts.add (formatPost (postData));
 		}
 		
 		return posts;
+	}
+	
+	private Map <String, Object> formatPost (Post postData) {
+		Map <String, Object> post = new HashMap <> ();
+		
+		post.put ("id", postData.getId ());
+		post.put ("creatorId", postData.getCreator ().getId ());
+		post.put ("body", postData.getBody ());
+		
+		List <String> imageUrls = new ArrayList <> ();
+		
+		for (PostImage postImage : postData.getImages ()) {
+			imageUrls.add (S3Utilities.urlPrefix + postImage.getPath ());
+		}
+		
+		post.put ("imageUrls", imageUrls);
+		
+		Map <Integer, Integer> likes = new HashMap <> ();
+		
+		for (PostLike postLike : postData.getLikes ()) {
+			likes.put (postLike.getCreator ().getId (), postLike.getId ());
+		}
+		
+		post.put ("likes", likes);
+		
+		List <Map <String, Object>> comments = new ArrayList <> ();
+		
+		for (Comment commentData : postData.getComments ()) {
+			Map <String, Object> comment = new HashMap <> ();
+			
+			comment.put ("id", commentData.getId ());
+			comment.put ("creatorId", commentData.getCreator ().getId ());
+			comment.put ("body", commentData.getBody ());
+			comment.put ("created", commentData.getCreated ());
+			
+			comments.add (comment);
+		}
+		
+		post.put ("comments", comments);
+		
+		post.put ("created", postData.getCreated ().toString ());
+		
+		return post;
 	}
 	
 	//todo refactor use CreatePostBody instead of Map 
@@ -112,7 +132,6 @@ public class PostController {
 			
 			post.setImages (postImages);
 			
-			//todo refactor
 			postService.updatePost (post);
 		}
 		
@@ -131,12 +150,14 @@ public class PostController {
 	}
 	
 	@GetMapping ("user")
-	public ResponseEntity <JsonResponse> getUserPosts (@RequestParam Integer userId, @RequestParam Integer page, HttpSession httpSession) throws UnauthorizedException {
+	public ResponseEntity <JsonResponse> getUserPosts (@RequestParam Integer userId, @RequestParam Integer page, HttpSession httpSession) throws UnauthorizedException, NotFoundException {
 		if (httpSession.getAttribute ("user") == null) {
 			throw new UnauthorizedException ();
 		}
 		
-		List <Post> posts = postService.getUserPosts (userId, page);
+		User user = userService.getUser (userId);
+		
+		List <Post> posts = postService.getUserPosts (user, page);
 		
 		return ResponseEntity.ok (new JsonResponse ("Found " + posts.size () + " posts", true, formatPosts (posts)));
 	}
@@ -147,6 +168,6 @@ public class PostController {
 			throw new UnauthorizedException ();
 		}
 
-		return ResponseEntity.ok (new JsonResponse ("Found post", true, postService.getPost (id)));
+		return ResponseEntity.ok (new JsonResponse ("Found post", true, formatPost (postService.getPost (id))));
 	}
 }
