@@ -165,7 +165,7 @@ public class PostController {
 	}
 	
 	@GetMapping ("{id}")
-	public ResponseEntity <JsonResponse> getPost (@PathVariable Integer id, HttpSession httpSession) throws UnauthorizedException {
+	public ResponseEntity <JsonResponse> getPost (@PathVariable Integer id, HttpSession httpSession) throws UnauthorizedException, NotFoundException {
 		if (httpSession.getAttribute ("user") == null) {
 			throw new UnauthorizedException ();
 		}

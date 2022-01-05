@@ -1,5 +1,6 @@
 package com.revature.project2backend.services;
 
+import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.Post;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.PostRepo;
@@ -38,8 +39,14 @@ public class PostService {
 		return this.postRepo.findByCreator (user, pageable).getContent ();
 	}
 	
-	public Post getPost (Integer id) {
-		return postRepo.findById (id).orElse (null);
+	public Post getPost (Integer id) throws NotFoundException {
+		Post post = postRepo.findById (id).orElse (null);
+		
+		if (post == null) {
+			throw new NotFoundException ("Post with id: " + id + " not found");
+		}
+		
+		return post;
 	}
 	
 	public void updatePost (Post post) {

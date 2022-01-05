@@ -63,11 +63,12 @@ public class UserService {
 	}
 	
 	public User loginUser (String identifier, String password) throws InvalidCredentialsException {
-		User user = this.userRepo.findByUsername (identifier);
+		//todo use service or repo methods?
+		User user = this.getUserByUsername (identifier);
 		
 		//if no user was found with username
 		if (user == null) {
-			user = this.userRepo.findByEmail (identifier);
+			user = this.getUserByEmail (identifier);
 		}
 		
 		//if no user was found with username or email
