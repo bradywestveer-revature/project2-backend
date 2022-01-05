@@ -49,11 +49,11 @@ public class UserController {
 			throw new InvalidValueException ("Email already in use");
 		}
 		
-		if (!user.getUsername ().matches ("[\\w-]+")) {
+		if (!user.getUsername ().matches ("^[\\w-]+$")) {
 			throw new InvalidValueException ("Invalid username");
 		}
 		
-		if (!user.getEmail ().matches ("[\\w-]+@[\\w-]+\\.[a-zA-z]+")) {
+		if (!user.getEmail ().matches ("^[\\w-]+@[\\w-]+\\.[a-zA-z]+$")) {
 			throw new InvalidValueException ("Invalid email");
 		}
 	}
