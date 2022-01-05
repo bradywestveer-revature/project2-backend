@@ -1,6 +1,7 @@
 package com.revature.project2backend.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.revature.project2backend.utilities.S3Utilities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,7 @@ public class User {
 	@JsonProperty (access = JsonProperty.Access.WRITE_ONLY)
 	private String password;
 	
-	private String profileImageUrl = "";
+	private String profileImageUrl = S3Utilities.url + "profile.jpg";
 	
 	public User (String firstName, String lastName, String email, String username, String password) {
 		this.firstName = firstName;

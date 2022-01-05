@@ -4,8 +4,10 @@ import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
 import com.revature.project2backend.jsonmodels.JsonResponse;
+import com.revature.project2backend.jsonmodels.UpdateUserBody;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.services.UserService;
+import com.revature.project2backend.utilities.S3Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +88,7 @@ public class UserController {
 	}
 	
 	@PutMapping ("{id}")
-	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody User body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {
+	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody UpdateUserBody body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {
 		User user = (User) httpSession.getAttribute ("user");
 		
 		if (user == null) {
@@ -117,8 +119,17 @@ public class UserController {
 			user.setPassword (body.getPassword ());
 		}
 		
-		if (body.getProfileImageUrl () != null) {
-			user.setProfileImageUrl (body.getProfileImageUrl ());
+		if (body.getProfileImageData () != null) {
+			String imageFileName = body.getProfileImageData ().getOrDefault ("fileName", null);
+			String imageData = body.getProfileImageData ().getOrDefault ("data", null);
+			
+			if (imageFileName != null && imageData != null) {
+				String path = System.currentTimeMillis () + user.getUsername () + imageFileName;
+				
+				S3Utilities.uploadImage (path, imageData);
+				
+				user.setProfileImageUrl (S3Utilities.url + path);
+			}
 		}
 		
 		validateUser (user);
