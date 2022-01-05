@@ -8,5 +8,6 @@ import java.util.Map;
 @Data
 public class CreatePostBody {
 	private String body;
+	//todo replace with List of ImageDataBody?
 	private List <Map <String, String>> images;
 }

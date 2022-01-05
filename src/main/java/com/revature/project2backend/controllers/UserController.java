@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping ("user")
@@ -34,11 +33,17 @@ public class UserController {
 			throw new InvalidValueException ("Invalid user");
 		}
 		
-		if (userService.getUserByUsername (user.getUsername ()) != null) {
+		User userWithUsername = userService.getUserByUsername (user.getUsername ());
+		
+		//if user with username exists and is not the same user as user
+		if (userWithUsername != null && !userWithUsername.getId ().equals (user.getId ())) {
 			throw new InvalidValueException ("Username already in use");
 		}
 		
-		if (userService.getUserByEmail (user.getEmail ()) != null) {
+		User userWithEmail = userService.getUserByEmail (user.getEmail ());
+		
+		//if user with email exists and is not the same user as user
+		if (userWithEmail != null && !userWithEmail.getId ().equals (user.getId ())) {
 			throw new InvalidValueException ("Email already in use");
 		}
 		
@@ -52,10 +57,10 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createUser (@RequestBody User user) throws InvalidValueException {
-		validateUser (user);
+	public ResponseEntity <JsonResponse> createUser (@RequestBody User body) throws InvalidValueException {
+		validateUser (body);
 		
-		this.userService.createUser (user);
+		this.userService.createUser (body);
 		
 		return ResponseEntity.ok (new JsonResponse ("Created user", true, null, "/login"));
 	}
@@ -81,29 +86,40 @@ public class UserController {
 	}
 	
 	@PutMapping ("{id}")
-	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody Map <String, Object> body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {
-		User sessionUser = (User) httpSession.getAttribute ("user");
+	public ResponseEntity <JsonResponse> updateUser (@PathVariable Integer id, @RequestBody User body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {
+		User user = (User) httpSession.getAttribute ("user");
 		
-		if (sessionUser == null) {
-			throw new NotFoundException ("User with id: " + id.toString () + " not found");
-		}
-		
-		if (!sessionUser.getId ().equals (id)) {
+		if (user == null) {
 			throw new UnauthorizedException ();
 		}
 		
-		User user = userService.getUser (id);
-		
-		if (user == null) {
-			throw new InvalidValueException ("User not found");
+		if (!user.getId ().equals (id)) {
+			throw new UnauthorizedException ();
 		}
 		
-		user.setFirstName ((String) body.getOrDefault ("firstName", user.getFirstName ()));
-		user.setLastName ((String) body.getOrDefault ("lastName", user.getLastName ()));
-		user.setEmail ((String) body.getOrDefault ("email", user.getEmail ()));
-		user.setUsername ((String) body.getOrDefault ("username", user.getUsername ()));
-		user.setPassword ((String) body.getOrDefault ("password", user.getPassword ()));
-		user.setProfileImageUrl ((String) body.getOrDefault ("profileImageUrl", user.getProfileImageUrl ()));
+		if (body.getFirstName () != null) {
+			user.setFirstName (body.getFirstName ());
+		}
+		
+		if (body.getLastName () != null) {
+			user.setLastName (body.getLastName ());
+		}
+		
+		if (body.getEmail () != null) {
+			user.setEmail (body.getEmail ());
+		}
+		
+		if (body.getUsername () != null) {
+			user.setUsername (body.getUsername ());
+		}
+		
+		if (body.getPassword () != null) {
+			user.setPassword (body.getPassword ());
+		}
+		
+		if (body.getProfileImageUrl () != null) {
+			user.setProfileImageUrl (body.getProfileImageUrl ());
+		}
 		
 		validateUser (user);
 		

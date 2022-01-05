@@ -114,10 +114,10 @@ public class PostController {
 		
 		if (body.getImages () != null) {
 			for (int i = 0; i < body.getImages ().size (); i++) {
-				String imageData = body.getImages ().get (i).getOrDefault ("data", null);
 				String imageFileName = body.getImages ().get (i).getOrDefault ("fileName", null);
+				String imageData = body.getImages ().get (i).getOrDefault ("data", null);
 				
-				if (imageData == null || imageFileName == null) {
+				if (imageFileName == null || imageData == null) {
 					continue;
 				}
 				

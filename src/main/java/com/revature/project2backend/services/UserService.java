@@ -51,8 +51,13 @@ public class UserService {
 		return this.userRepo.findByEmail (email);
 	}
 	
-	public void updateUser (User user) {
-		user.setPassword (passwordEncoder.encode (user.getPassword ()));
+	public void updateUser (User user) throws NotFoundException {
+		//todo replace this with boolean encryptPassword paramater?
+		//if user's password has been updated
+		if (!user.getPassword ().equals (this.getUser (user.getId ()).getPassword ())) {
+			//encrypt the new password
+			user.setPassword (passwordEncoder.encode (user.getPassword ()));
+		}
 		
 		this.userRepo.save (user);
 	}

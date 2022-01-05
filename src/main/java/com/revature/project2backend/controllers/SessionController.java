@@ -24,6 +24,10 @@ public class SessionController {
 	
 	@PostMapping
 	public ResponseEntity <JsonResponse> createSession (@RequestBody CreateSessionBody body, HttpSession httpSession) throws InvalidCredentialsException {
+		if (body.getIdentifier () == null || body.getPassword () == null) {
+			throw new InvalidCredentialsException ();
+		}
+		
 		User user = this.userService.loginUser (body.getIdentifier (), body.getPassword ());
 		
 		httpSession.setAttribute ("user", user);
