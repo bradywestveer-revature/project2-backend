@@ -89,6 +89,9 @@ public class PostController {
 			comments.add (comment);
 		}
 		
+		//sort newest to oldest, todo use created
+		Collections.reverse (comments);
+		
 		post.put ("comments", comments);
 		
 		post.put ("created", postData.getCreated ().toString ());

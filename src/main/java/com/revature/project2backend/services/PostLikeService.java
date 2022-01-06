@@ -18,10 +18,6 @@ public class PostLikeService {
 		this.postLikeRepo.save (postLike);
 	}
 	
-	public PostLike getPostLike (Integer id) {
-		return this.postLikeRepo.findById (id).orElse (null);
-	}
-	
 	public void deletePostLike (PostLike postLike) {
 		this.postLikeRepo.delete (postLike);
 	}

@@ -26,7 +26,7 @@ public class EmailService {
         props.put("mail.debug", "true");
         return mailSender;
     }
-
+	
     @Async
     public void sendEmail(SimpleMailMessage simpleMailMessage) {
         javaMailSender.send(simpleMailMessage);

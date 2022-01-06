@@ -92,6 +92,8 @@ public class UserService {
 	}
 
 	public void updateUserAlwaysEncrypt (User user, String password) throws NotFoundException {
+		//todo don't use, use other updateUser method, there is a problem with encryption
+		
 		// Assumes valid user already populated
 		user.setPassword (passwordEncoder.encode (password));
 		this.userRepo.save (user);
