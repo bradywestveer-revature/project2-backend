@@ -50,6 +50,8 @@ public class UserService {
 	public User getUserByEmail (String email) {
 		return this.userRepo.findByEmail (email);
 	}
+
+	public User getUserByPasswordResetId (Integer passwordResetId) { return this.userRepo.findByPasswordResetId(passwordResetId); }
 	
 	public void updateUser (User user) throws NotFoundException {
 		//todo replace this with boolean encryptPassword paramater?
@@ -75,7 +77,7 @@ public class UserService {
 		if (user == null) {
 			throw new InvalidCredentialsException ();
 		}
-		
+
 		if (passwordEncoder.matches (password, user.getPassword ())) {
 			return user;
 		}
@@ -83,5 +85,15 @@ public class UserService {
 		else {
 			throw new InvalidCredentialsException ();
 		}
+	}
+
+	public User getUserByPasswordResetToken(String token) {
+		return userRepo.findByPasswordResetToken(token);
+	}
+
+	public void updateUserAlwaysEncrypt (User user, String password) throws NotFoundException {
+		// Assumes valid user already populated
+		user.setPassword (passwordEncoder.encode (password));
+		this.userRepo.save (user);
 	}
 }
