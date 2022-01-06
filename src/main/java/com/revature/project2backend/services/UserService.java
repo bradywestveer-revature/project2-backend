@@ -50,6 +50,8 @@ public class UserService {
 	public User getUserByEmail (String email) {
 		return this.userRepo.findByEmail (email);
 	}
+
+	public User getUserByPasswordResetId (Integer passwordResetId) { return this.userRepo.findByPasswordResetId(passwordResetId); }
 	
 	public void updateUser (User user) {
 		user.setPassword (passwordEncoder.encode (user.getPassword ()));
@@ -77,5 +79,9 @@ public class UserService {
 		else {
 			throw new InvalidCredentialsException ();
 		}
+	}
+
+	public User getUserByPasswordResetToken(String token) {
+		return userRepo.findByPasswordResetToken(token);
 	}
 }
