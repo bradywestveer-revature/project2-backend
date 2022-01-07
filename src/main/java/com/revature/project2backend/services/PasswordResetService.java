@@ -14,7 +14,7 @@ import java.util.UUID;
 @Service
 public class PasswordResetService {
 
-	private final String RESET_URL = "http://localhost:4200/change-password";
+	private final String RESET_URL = System.getenv ("PROJECT2_FRONTEND_URL") + "change-password";
 	private final PasswordResetRepo passwordResetRepo;
 	private final EmailService emailService;
 	private final UserService userService;
