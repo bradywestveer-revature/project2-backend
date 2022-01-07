@@ -19,7 +19,6 @@ import java.util.Date;
 
 @RestController
 @RequestMapping ("comment")
-@CrossOrigin (origins = "http://localhost:4200", allowCredentials = "true")
 public class CommentController {
 	private final CommentService commentService;
 	private final PostService postService;
