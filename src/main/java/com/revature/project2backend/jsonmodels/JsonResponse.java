@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 @NoArgsConstructor
 @Data
@@ -16,7 +15,7 @@ public class JsonResponse {
 	private Object data;
 	private String redirect;
 	
-	private static final Logger logger = LogManager.getLogger (JsonResponse.class);
+	private static final Logger logger = Logger.getLogger (JsonResponse.class);
 	
 	public JsonResponse (Exception exception) {
 		this (exception.getMessage (), false);
