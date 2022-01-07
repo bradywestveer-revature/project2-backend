@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping ("session")
+@CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class SessionController {
 	private final UserService userService;
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("reset-password")
+@CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class PasswordResetController {
     private final UserService userService;
     private final PasswordResetService passwordResetService;

@@ -20,6 +20,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping ("post")
+@CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class PostController {
 	private final PostService postService;
 	private final PostImageService postImageService;

@@ -19,6 +19,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping ("comment")
+@CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class CommentController {
 	private final CommentService commentService;
 	private final PostService postService;

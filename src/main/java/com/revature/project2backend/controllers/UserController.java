@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping ("user")
+@CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class UserController {
 	private final UserService userService;
 	
