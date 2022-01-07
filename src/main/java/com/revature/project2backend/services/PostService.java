@@ -30,6 +30,7 @@ public class PostService {
 	public List <Post> getPosts (Integer page) {
 		Pageable pageable = PageRequest.of (page, postsPerPage, Sort.by ("created").descending ());
 		
+		//todo do we need to check for null? When i was mocking without passing in pageable I was getting a NullPointerException, so findAll could return null somehow?
 		return this.postRepo.findAll (pageable).getContent ();
 	}
 	

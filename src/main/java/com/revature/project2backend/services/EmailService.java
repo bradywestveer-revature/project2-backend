@@ -11,24 +11,24 @@ import java.util.Properties;
 
 @Service
 public class EmailService {
-
-    private final JavaMailSender javaMailSender;
-
-    @Autowired
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
-
-    @Autowired
-    public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.debug", "true");
-        return mailSender;
-    }
 	
-    @Async
-    public void sendEmail(SimpleMailMessage simpleMailMessage) {
-        javaMailSender.send(simpleMailMessage);
-    }
+	private final JavaMailSender javaMailSender;
+	
+	@Autowired
+	public EmailService (JavaMailSender javaMailSender) {
+		this.javaMailSender = javaMailSender;
+	}
+	
+	@Autowired
+	public JavaMailSender getJavaMailSender () {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl ();
+		Properties props = mailSender.getJavaMailProperties ();
+		props.put ("mail.debug", "true");
+		return mailSender;
+	}
+	
+	@Async
+	public void sendEmail (SimpleMailMessage simpleMailMessage) {
+		javaMailSender.send (simpleMailMessage);
+	}
 }

@@ -12,11 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 class UserRepoIT {
 	@Autowired
-	UserRepo userRepo;
+	private UserRepo userRepo;
 	
 	@BeforeEach
 	void setUp () {
 		userRepo.save (new User ("John", "Smith", "johnsmith@example.com", "johnsmith", "password"));
+		userRepo.save (new User ("Sarah", "Smith", "sarahsmith@example.com", "sarahsmith", "password"));
+		userRepo.save (new User ("Tom", "Smith", "tomsmith@example.com", "tomsmith", "password"));
 	}
 	
 	@AfterEach
