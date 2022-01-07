@@ -20,7 +20,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping ("post")
-@CrossOrigin (origins = "http://localhost:4200", allowCredentials = "true")
 public class PostController {
 	private final PostService postService;
 	private final PostImageService postImageService;

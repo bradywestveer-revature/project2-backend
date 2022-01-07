@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping ("postlike")
-@CrossOrigin (origins = "http://localhost:4200", allowCredentials = "true")
 public class PostLikeController {
 	private final PostLikeService postLikeService;
 	private final PostService postService;
