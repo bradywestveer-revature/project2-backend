@@ -13,8 +13,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @Entity
+@Table(name = "users")
 public class User {
+
 	public User (String firstName, String lastName, String email, String username, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+
+	public User(Integer id, String firstName, String lastName, String email, String username, String password) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -47,4 +58,5 @@ public class User {
 	@JsonIgnoreProperties({"user"})
 	@OneToOne(mappedBy = "user")
 	private PasswordReset passwordReset;
+
 }

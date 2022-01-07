@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Service
 public class PasswordResetService {
+
 	private final String RESET_URL = "http://localhost:4200/change-password";
 	private final PasswordResetRepo passwordResetRepo;
 	private final EmailService emailService;
@@ -61,4 +62,5 @@ public class PasswordResetService {
 		userService.updateUserAlwaysEncrypt (user, password);
 		passwordResetRepo.deleteById (user.getPasswordReset ().getId ());
 	}
+
 }
