@@ -51,8 +51,6 @@ public class UserService {
 		return this.userRepo.findByEmail (email);
 	}
 
-	public User getUserByPasswordResetId (Integer passwordResetId) { return this.userRepo.findByPasswordResetId(passwordResetId); }
-	
 	public void updateUser (User user) throws NotFoundException {
 		//todo replace this with boolean encryptPassword paramater?
 		//if user's password has been updated

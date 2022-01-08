@@ -1,5 +1,6 @@
 package com.revature.project2backend.repositories;
 
+import com.revature.project2backend.models.PasswordReset;
 import com.revature.project2backend.models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,12 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class UserRepoIT {
 	@Autowired
 	private UserRepo userRepo;
+	@Autowired
+	private PasswordResetRepo passwordResetRepo;
 	
 	@BeforeEach
 	void setUp () {
@@ -23,6 +28,7 @@ class UserRepoIT {
 	
 	@AfterEach
 	void tearDown () {
+		passwordResetRepo.deleteAll();
 		userRepo.deleteAll ();
 	}
 	
@@ -49,12 +55,12 @@ class UserRepoIT {
 	}
 	
 	@Test
-	void findByPasswordResetId () {
-		
-	}
-	
-	@Test
 	void findByPasswordResetToken () {
-		
+		User expectedUser = userRepo.findByUsername("sarahsmith");
+		String token = UUID.randomUUID ().toString ();
+		PasswordReset passwordReset = new PasswordReset(null, expectedUser, token);
+		passwordResetRepo.save(passwordReset);
+		User actualUser = userRepo.findByPasswordResetToken(token);
+		assertEquals(expectedUser.getId(), actualUser.getId());
 	}
 }
