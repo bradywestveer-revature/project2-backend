@@ -40,8 +40,6 @@ public class PasswordResetService {
 			passwordReset.setToken (this.generateToken ());
 		}
 		passwordResetRepo.save (passwordReset);
-		Integer id = passwordReset.getId ();
-		Optional <PasswordReset> passwordReset2 = passwordResetRepo.findById (id);
 		return passwordReset;
 	}
 	
@@ -55,6 +53,8 @@ public class PasswordResetService {
 	}
 	
 	public User getUserByPasswordResetToken (String token) {
+		if (token==null || token.length()<36) return null;
+
 		return userService.getUserByPasswordResetToken (token);
 	}
 	
