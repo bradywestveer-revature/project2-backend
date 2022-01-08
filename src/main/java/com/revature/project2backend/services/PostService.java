@@ -37,6 +37,7 @@ public class PostService {
 	public List <Post> getUserPosts (User user, Integer page) {
 		Pageable pageable = PageRequest.of (page, postsPerPage, Sort.by ("created").descending ());
 		
+		//todo check if user is null? update test if so
 		return this.postRepo.findByCreator (user, pageable).getContent ();
 	}
 	
