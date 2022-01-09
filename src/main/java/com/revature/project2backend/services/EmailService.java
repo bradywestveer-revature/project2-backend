@@ -42,7 +42,7 @@ public class EmailService {
 			} else {
 				logger.error(e);
 			}
-			throw new InvalidValueException("Password reset e-mail NOT sent, please check if the e-mail address is valid and registered.");
+			throw new InvalidValueException("Password reset e-mail NOT sentV, please check if the e-mail address is valid and registered.");
 		}
 	}
 }
