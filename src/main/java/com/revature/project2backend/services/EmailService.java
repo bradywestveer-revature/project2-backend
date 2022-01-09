@@ -38,7 +38,7 @@ public class EmailService {
 			javaMailSender.send(simpleMailMessage);
 		} catch (MailSendException e) {
 			if (e.getMessage().contains("554 Message rejected: Email address is not verified.")) {
-				logger.error("AWS SES is in sandbox mode, e-mail recipient"+ simpleMailMessage.getTo()+ " is either valid and not registered or not a valid e-mail address.");
+				logger.error("AWS SES is in sandbox mode, e-mail recipient "+ simpleMailMessage.getTo()[0]+ " is either valid and not registered or not a valid e-mail address.");
 			} else {
 				logger.error(e);
 			}
