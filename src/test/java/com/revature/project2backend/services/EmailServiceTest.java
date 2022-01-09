@@ -1,5 +1,6 @@
 package com.revature.project2backend.services;
 
+import com.revature.project2backend.exceptions.InvalidValueException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,7 +16,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void sendEmail() {
+    void sendEmail() throws InvalidValueException {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         /**
          * See PasswordResetServiceTest::sendPasswordResetEmail for where SimpleMailMessage is populated for better test

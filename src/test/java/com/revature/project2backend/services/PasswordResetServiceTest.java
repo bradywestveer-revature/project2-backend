@@ -1,5 +1,6 @@
 package com.revature.project2backend.services;
 
+import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.PasswordReset;
 import com.revature.project2backend.models.User;
@@ -72,7 +73,7 @@ class PasswordResetServiceTest {
     }
 
     @Test
-    void sendPasswordResetEmail() {
+    void sendPasswordResetEmail() throws InvalidValueException {
         User user = new User(1, "John", "Smith", "johnsmith@javadev.com", "jsmith", passwordEncoder.encode("jsmith123"), "", null);
         String oldToken = UUID.randomUUID ().toString ();
         PasswordReset passwordReset = new PasswordReset(1, user, oldToken);

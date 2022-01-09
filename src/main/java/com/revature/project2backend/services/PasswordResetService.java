@@ -1,5 +1,6 @@
 package com.revature.project2backend.services;
 
+import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.PasswordReset;
 import com.revature.project2backend.models.User;
@@ -43,7 +44,7 @@ public class PasswordResetService {
 		return passwordReset;
 	}
 	
-	public void sendPasswordResetEmail (User user, PasswordReset passwordReset) {
+	public void sendPasswordResetEmail (User user, PasswordReset passwordReset) throws InvalidValueException {
 		SimpleMailMessage passwordResetEmail = new SimpleMailMessage ();
 		passwordResetEmail.setFrom ("jason.chan@revature.net");
 		passwordResetEmail.setTo (user.getEmail ());
