@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class PasswordResetRepoIT {
 
     String token = null;
+    
     @Autowired
     PasswordResetRepo passwordResetRepo;
 
