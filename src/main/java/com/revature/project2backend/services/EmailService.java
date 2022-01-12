@@ -1,7 +1,6 @@
 package com.revature.project2backend.services;
 
 import com.revature.project2backend.exceptions.InvalidValueException;
-import com.sun.mail.smtp.SMTPSendFailedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
@@ -17,7 +16,7 @@ import java.util.Properties;
 public class EmailService {
 
 	private final JavaMailSender javaMailSender;
-	private static Logger logger = Logger.getLogger(EmailService.class);
+	private static final Logger logger = Logger.getLogger(EmailService.class);
 	
 	@Autowired
 	public EmailService (JavaMailSender javaMailSender) {

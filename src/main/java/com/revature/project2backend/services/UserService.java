@@ -89,7 +89,7 @@ public class UserService {
 		return userRepo.findByPasswordResetToken(token);
 	}
 
-	public void updateUserAlwaysEncrypt (User user, String password) throws NotFoundException {
+	public void updateUserAlwaysEncrypt (User user, String password) {
 		//todo don't use, use other updateUser method, there is a problem with encryption
 		
 		// Assumes valid user already populated
