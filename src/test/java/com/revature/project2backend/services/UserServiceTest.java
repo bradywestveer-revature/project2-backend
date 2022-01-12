@@ -4,8 +4,6 @@ import com.revature.project2backend.exceptions.InvalidCredentialsException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.UserRepo;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,23 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
 
-    UserService userService;
-    UserRepo userRepo = Mockito.mock(UserRepo.class);
+    final UserService userService;
+    final UserRepo userRepo = Mockito.mock(UserRepo.class);
     private final BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
 
     public UserServiceTest(){
         this.userService = new UserService(userRepo);
     }
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
+	
+	@Test
     void createUser() {
 
         User mockUser = new User("David", "Helfer", "yes@gmail.com", "username", "password");
@@ -187,9 +177,7 @@ class UserServiceTest {
         /**
          * username is not valid
          * */
-        assertThrows (InvalidCredentialsException.class, () -> {
-            userService.loginUser("j", password);
-        });
+        assertThrows (InvalidCredentialsException.class, () -> userService.loginUser("j", password));
     }
 
     @Test
@@ -205,9 +193,7 @@ class UserServiceTest {
         /**
          * username is valid, but password is not
          * */
-        assertThrows (InvalidCredentialsException.class, () -> {
-            userService.loginUser(username, "password12");
-        });
+        assertThrows (InvalidCredentialsException.class, () -> userService.loginUser(username, "password12"));
     }
 
     @Test
@@ -240,9 +226,7 @@ class UserServiceTest {
         /**
          * They logged in with wrong email
          * */
-        assertThrows (InvalidCredentialsException.class, () -> {
-                    userService.loginUser("johnsmith@javada.com", password);
-        });
+        assertThrows (InvalidCredentialsException.class, () -> userService.loginUser("johnsmith@javada.com", password));
     }
 
     @Test
@@ -258,9 +242,7 @@ class UserServiceTest {
         /**
          * They logged in with right email but wrong password
          * */
-        assertThrows (InvalidCredentialsException.class, () -> {
-            userService.loginUser(email, "password12");
-        });
+        assertThrows (InvalidCredentialsException.class, () -> userService.loginUser(email, "password12"));
     }
 
     @Test

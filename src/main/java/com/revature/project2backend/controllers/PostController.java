@@ -1,5 +1,6 @@
 package com.revature.project2backend.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.exceptions.NotFoundException;
 import com.revature.project2backend.exceptions.UnauthorizedException;
@@ -100,7 +101,7 @@ public class PostController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createPost (@RequestBody CreatePostBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException, IOException {
+	public ResponseEntity <JsonResponse> createPost (@RequestBody CreatePostBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
 		User user = (User) httpSession.getAttribute ("user");
 		
 		if (user == null) {
@@ -124,6 +125,7 @@ public class PostController {
 					continue;
 				}
 				
+				//todo move image upload stuff to PostService?
 				String path = System.currentTimeMillis () + String.valueOf (i) + user.getUsername () + imageFileName;
 				
 				S3Utilities.uploadImage (path, imageData);

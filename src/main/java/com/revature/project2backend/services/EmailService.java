@@ -26,7 +26,7 @@ public class EmailService {
 	/**
 	 * A logger to keep track of errors involved in the EmailService
 	 */
-	private static Logger logger = Logger.getLogger(EmailService.class);
+	private static final Logger logger = Logger.getLogger(EmailService.class);
 
 	/**
 	 * The constructor for the EmailService that uses dependency injection through Spring.

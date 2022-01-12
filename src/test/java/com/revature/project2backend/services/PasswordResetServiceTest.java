@@ -6,8 +6,6 @@ import com.revature.project2backend.models.PasswordReset;
 import com.revature.project2backend.models.User;
 import com.revature.project2backend.repositories.PasswordResetRepo;
 import com.revature.project2backend.repositories.UserRepo;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.mail.SimpleMailMessage;
@@ -23,27 +21,19 @@ class PasswordResetServiceTest {
     private final String RESET_URL = System.getenv ("PROJECT2_FRONTEND_URL") + "change-password";
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final PasswordResetRepo passwordResetRepo = Mockito.mock(PasswordResetRepo.class);
-    JavaMailSender javaMailSender = Mockito.mock(JavaMailSender.class);
+    final JavaMailSender javaMailSender = Mockito.mock(JavaMailSender.class);
     private final EmailService emailService;
-    UserRepo userRepo = Mockito.mock(UserRepo.class);
+    final UserRepo userRepo = Mockito.mock(UserRepo.class);
     private final UserService userService;
-    PasswordResetService passwordResetService;
+    final PasswordResetService passwordResetService;
 
     public PasswordResetServiceTest() {
         this.userService = new UserService(this.userRepo);
         this.emailService = new EmailService(this.javaMailSender);
         this.passwordResetService = new PasswordResetService(passwordResetRepo, emailService, userService);
     }
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
+	
+	@Test
     void createOrUpdateToken_FoundOldUnusedToken() {
         User user = new User(1, "John", "Smith", "johnsmith@javadev.com", "jsmith", passwordEncoder.encode("jsmith123"), "", null);
         String oldToken = UUID.randomUUID ().toString ();
@@ -67,7 +57,7 @@ class PasswordResetServiceTest {
          * If there is NOT an existing token it means there was no passwordReset record, it was either deleted when the user
          * changed (reset) their password by email or never tried to reset their password via email before
          * */
-        assertTrue(passwordResetNew.getToken().length()==36);
+		assertEquals (36, passwordResetNew.getToken ().length ());
         PasswordReset passwordResetTest = new PasswordReset(null, user, passwordResetNew.getToken());
         Mockito.verify(this.passwordResetRepo, Mockito.times(1)).save(passwordResetTest);
     }

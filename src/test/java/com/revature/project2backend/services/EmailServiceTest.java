@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmailServiceTest {
-    JavaMailSender javaMailSender = Mockito.mock(JavaMailSender.class);
+    final JavaMailSender javaMailSender = Mockito.mock(JavaMailSender.class);
     private final EmailService emailService;
     public EmailServiceTest() {
         emailService = new EmailService(javaMailSender);
@@ -27,7 +27,7 @@ class EmailServiceTest {
     }
 
     @Test
-    void sendEmail_SMTPError() throws InvalidValueException {
+    void sendEmail_SMTPError() {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom ("jason.chan@revature.net");
         simpleMailMessage.setTo ("jsmith@javadev.com");

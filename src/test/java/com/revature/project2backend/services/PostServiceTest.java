@@ -79,9 +79,7 @@ class PostServiceTest {
 		
 		Mockito.when (postRepo.findById (id)).thenReturn (Optional.empty ());
 		
-		assertThrows (NotFoundException.class, () -> {
-			postService.getPost (id);
-		});
+		assertThrows (NotFoundException.class, () -> postService.getPost (id));
 	}
 	
 	@Test

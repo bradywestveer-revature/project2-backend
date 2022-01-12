@@ -1,6 +1,7 @@
 package com.revature.project2backend.controllers;
 
 import com.revature.project2backend.exceptions.InvalidCredentialsException;
+import com.revature.project2backend.exceptions.InvalidValueException;
 import com.revature.project2backend.jsonmodels.CreateSessionBody;
 import com.revature.project2backend.jsonmodels.JsonResponse;
 import com.revature.project2backend.models.User;
@@ -23,9 +24,9 @@ public class SessionController {
 	}
 	
 	@PostMapping
-	public ResponseEntity <JsonResponse> createSession (@RequestBody CreateSessionBody body, HttpSession httpSession) throws InvalidCredentialsException {
+	public ResponseEntity <JsonResponse> createSession (@RequestBody CreateSessionBody body, HttpSession httpSession) throws InvalidCredentialsException, InvalidValueException {
 		if (body.getIdentifier () == null || body.getPassword () == null) {
-			throw new InvalidCredentialsException ();
+			throw new InvalidValueException ("Invalid credentials");
 		}
 		
 		User user = this.userService.loginUser (body.getIdentifier (), body.getPassword ());

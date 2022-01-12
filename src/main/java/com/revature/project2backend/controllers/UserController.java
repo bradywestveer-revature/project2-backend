@@ -126,6 +126,7 @@ public class UserController {
 			if (imageFileName != null && imageData != null) {
 				String path = System.currentTimeMillis () + user.getUsername () + imageFileName;
 				
+				//todo move image upload stuff to UserService?
 				S3Utilities.uploadImage (path, imageData);
 				
 				user.setProfileImageUrl (S3Utilities.url + path);

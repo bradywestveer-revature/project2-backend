@@ -27,12 +27,19 @@ public class PasswordResetController {
 	
 	@PostMapping
 	ResponseEntity <JsonResponse> resetPassword (@RequestBody PasswordResetBody body) throws InvalidValueException {
+		if (body.getEmail () == null) {
+			throw new InvalidValueException ("Invalid email");
+		}
+		
 		User user = userService.getUserByEmail (body.getEmail ());
+		
 		if (user == null) {
 			throw new InvalidValueException ("Email for this user does not exist in system.");
 		}
+		
 		//Create password reset token for user and e-mail them the reset link
 		passwordResetService.sendPasswordResetEmail (user, passwordResetService.createOrUpdateToken (user));
+		
 		return ResponseEntity.ok (new JsonResponse ("Successfully sent password reset e-mail to " + body.getEmail () + ".", true));
 	}
 	
@@ -40,6 +47,10 @@ public class PasswordResetController {
 	ResponseEntity <JsonResponse> changePassword (@RequestBody ChangePasswordBody body) throws InvalidValueException, NotFoundException {
 		if (body.getToken () == null) {
 			throw new InvalidValueException ("Invalid password reset token");
+		}
+		
+		if (body.getPassword () == null) {
+			throw new InvalidValueException ("Invalid password");
 		}
 		
 		User user = passwordResetService.getUserByPasswordResetToken (body.getToken ());

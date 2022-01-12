@@ -46,7 +46,7 @@ public class PostLikeController {
 		//check if user has already liked this post
 		for (int i = 0; i < post.getLikes ().size (); i++) {
 			if (post.getLikes ().get (i).getCreator ().getId ().equals (user.getId ())) {
-				throw new InvalidValueException ("Post has already been liked by user with id: " + user.getId ());
+				throw new InvalidValueException ("Post is already liked by user with id: " + user.getId ());
 			}
 		}
 		
@@ -85,6 +85,7 @@ public class PostLikeController {
 			}
 		}
 		
-		throw new InvalidValueException ("Invalid post id");
+		//user hasn't liked this post
+		throw new InvalidValueException ("Post is not liked by user with id: " + user.getId ());
 	}
 }
