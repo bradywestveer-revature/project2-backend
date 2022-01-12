@@ -1,7 +1,6 @@
 package com.revature.project2backend.services;
 
 import com.revature.project2backend.exceptions.InvalidValueException;
-import com.sun.mail.smtp.SMTPSendFailedException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
@@ -13,17 +12,37 @@ import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
+/**
+ * This class contains all methods associated with sending an email with a link to reset a password.
+ */
 @Service
 public class EmailService {
 
+	/**
+	 * An instance of the JavaMailSender
+	 */
 	private final JavaMailSender javaMailSender;
+
+	/**
+	 * A logger to keep track of errors involved in the EmailService
+	 */
 	private static Logger logger = Logger.getLogger(EmailService.class);
-	
+
+	/**
+	 * The constructor for the EmailService that uses dependency injection through Spring.
+	 *
+	 * @param javaMailSender An instance of the JavaMailSender
+	 */
 	@Autowired
 	public EmailService (JavaMailSender javaMailSender) {
 		this.javaMailSender = javaMailSender;
 	}
-	
+
+	/**
+	 * Instantiates JavaMailSender
+	 *
+	 * @return An instantiated JavaMailSender Object
+	 */
 	@Autowired
 	public JavaMailSender getJavaMailSender () {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl ();
@@ -31,7 +50,13 @@ public class EmailService {
 		props.put ("mail.debug", "true");
 		return mailSender;
 	}
-	
+
+	/**
+	 * Sends an email to a specific user. The argument is formatted through the javaMailSender instance.
+	 *
+	 * @param simpleMailMessage A SimpleMailMessage Object
+	 * @throws InvalidValueException
+	 */
 	@Async
 	public void sendEmail (SimpleMailMessage simpleMailMessage) throws InvalidValueException {
 		try {

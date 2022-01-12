@@ -87,8 +87,6 @@ class UserServiceTest {
         Mockito.when(userRepo.findById(1)).thenReturn(Optional.ofNullable(expectedResult.get(0)));
 
         User actualResult = userService.getUser(1);
-        System.out.println(expectedResult.get(0));
-        System.out.println(actualResult);
 
         assertEquals(expectedResult.get(0), actualResult);
     }
@@ -125,14 +123,14 @@ class UserServiceTest {
 
     @Test
     void updateUser_PasswordChanged() throws NotFoundException{
-        /**
+        /*
          * Test password was changed case
         * */
         String oldPassword = passwordEncoder.encode("jsmith123");
         User userBeforeChange = new User(1, "John", "Smith", "johnsmith@javadev.com", "jsmith", oldPassword, "", null);
         Integer id = 1;
         Mockito.when(this.userRepo.findById (id)).thenReturn (java.util.Optional.of(userBeforeChange));
-        /**
+        /*
          * When the user is changing their profile which includes password or email, etc. updating feature the initial password will come across as UN-encrypted
          * A non-changed password should not result in the encryption of the already-encrypted password
          * */
@@ -143,16 +141,17 @@ class UserServiceTest {
         Mockito.verify(this.userRepo, Mockito.times(1)).save(userAfterPasswordChange);
     }
 
+
     @Test
     void updateUser_PasswordNOTChanged() throws NotFoundException{
-        /**
+        /*
          * Test password was NOT changed case
          * */
         String oldPassword = passwordEncoder.encode("jsmith123");
         User userBeforeChange = new User(1, "John", "Smith", "johnsmith@javadev.com", "jsmith", oldPassword, "", null);
         Integer id = 1;
         Mockito.when(this.userRepo.findById (id)).thenReturn (java.util.Optional.of(userBeforeChange));
-        /**
+        /*
          * When the user is changing their profile which includes password or email, etc. and did not touch the password field, then the user.password will come across
          * as what is from the database or ENCRYPTED, unlike in the case where they touched the password field and changed it on their UI which will come across
          * UN-encrypted.  This tests the no-change, didn't touch field case.
