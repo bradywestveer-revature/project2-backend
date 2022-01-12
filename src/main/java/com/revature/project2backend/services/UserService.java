@@ -65,7 +65,7 @@ public class UserService {
 	 *
 	 * @param id An Integer
 	 * @return A User Object with a specific id
-	 * @throws NotFoundException
+	 * @throws NotFoundException Throws when a user is not found with the given id
 	 */
 	public User getUser (Integer id) throws NotFoundException {
 		User user = this.userRepo.findById (id).orElse (null);
@@ -90,7 +90,7 @@ public class UserService {
 	/**
 	 * Returns a User Object with a specific email.
 	 *
-	 * @param email A String
+	 * @param email The email to use to find a user
 	 * @return Returns a User
 	 */
 	public User getUserByEmail (String email) {
@@ -101,7 +101,7 @@ public class UserService {
 	 * Updates an older User Object with the User Object that is passed in and encrypts their password.
 	 *
 	 * @param user A User Object
-	 * @throws NotFoundException
+	 * @throws NotFoundException Throws when the user is not found
 	 */
 	public void updateUser (User user) throws NotFoundException {
 		//todo replace this with boolean encryptPassword paramater?
