@@ -80,7 +80,7 @@ public class PostService {
 	 *
 	 * @param id The id of the specified Post
 	 * @return A Post Object with the specific id
-	 * @throws NotFoundException
+	 * @throws NotFoundException Thrown when the post is not found
 	 */
 	public Post getPost (Integer id) throws NotFoundException {
 		Post post = postRepo.findById (id).orElse (null);

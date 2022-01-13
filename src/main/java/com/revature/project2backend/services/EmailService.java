@@ -55,7 +55,7 @@ public class EmailService {
 	 * Sends an email to a specific user. The argument is formatted through the javaMailSender instance.
 	 *
 	 * @param simpleMailMessage A SimpleMailMessage Object
-	 * @throws InvalidValueException
+	 * @throws InvalidValueException Thrown when the email is invalid
 	 */
 	@Async
 	public void sendEmail (SimpleMailMessage simpleMailMessage) throws InvalidValueException {

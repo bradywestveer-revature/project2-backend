@@ -72,7 +72,7 @@ public class CommentController {
 	 * @return A Json Response stating the comment was created
 	 * @throws InvalidValueException Thrown when post isn't found
 	 * @throws UnauthorizedException Thrown when there is no session
-	 * @throws NotFoundException
+	 * @throws NotFoundException Thrown when no user is found
 	 */
 	@PostMapping
 	public ResponseEntity <JsonResponse> createComment (@RequestBody CreateCommentBody body, HttpSession httpSession) throws InvalidValueException, UnauthorizedException, NotFoundException {

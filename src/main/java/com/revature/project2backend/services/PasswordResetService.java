@@ -86,7 +86,7 @@ public class PasswordResetService {
 	 *
 	 * @param user A User Object
 	 * @param passwordReset A PasswordReset Object
-	 * @throws InvalidValueException
+	 * @throws InvalidValueException Thrown when the user is not found or token is invalid
 	 */
 	public void sendPasswordResetEmail (User user, PasswordReset passwordReset) throws InvalidValueException {
 		SimpleMailMessage passwordResetEmail = new SimpleMailMessage ();
@@ -113,9 +113,8 @@ public class PasswordResetService {
 	 *
 	 * @param user A User Object
 	 * @param password A String that is going to be set to the users password
-	 * @throws NotFoundException
 	 */
-	public void changePasswordAndDeleteToken (User user, String password) throws NotFoundException {
+	public void changePasswordAndDeleteToken (User user, String password) {
 		userService.updateUserAlwaysEncrypt (user, password);
 		passwordResetRepo.deleteById (user.getPasswordReset ().getId ());
 	}
