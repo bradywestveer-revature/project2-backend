@@ -16,19 +16,47 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+/**
+ * The PostLikeController is responsible for mapping all endpoints necessary for passing data, pertaining to PostLikes, from
+ * the client to the server.
+ */
 @RestController
 @RequestMapping ("postlike")
 @CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class PostLikeController {
+
+	/**
+	 * An instance of PostLikeService used for accessing the methods in the class.
+	 */
 	private final PostLikeService postLikeService;
+
+	/**
+	 * An instance of PostService used for accessing the methods in the class.
+	 */
 	private final PostService postService;
-	
+
+	/**
+	 * This Constructor initializes PostService and PostLikeService.
+	 *
+	 * @param postLikeService An instance of PostService used for accessing the methods in the class.
+	 * @param postService An instance of PostLikeService used for accessing the methods in the class.
+	 */
 	@Autowired
 	public PostLikeController (PostLikeService postLikeService, PostService postService) {
 		this.postLikeService = postLikeService;
 		this.postService = postService;
 	}
-	
+
+	/**
+	 * Creates a like adn associates with a specific Post and User Object
+	 *
+	 * @param body A DTO containing the posts id
+	 * @param httpSession A session started by the user
+	 * @return A JsonResponse notifying the user the like was created
+	 * @throws UnauthorizedException Thrown when the user is not associated with the session
+	 * @throws InvalidValueException Thrown when the post has an invalid id
+	 * @throws NotFoundException Thrown when the post or user isn't found
+	 */
 	@PostMapping
 	public ResponseEntity <JsonResponse> createPostLike (@RequestBody CreateLikeBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException, NotFoundException {
 		User user = (User) httpSession.getAttribute ("user"); 
@@ -60,7 +88,17 @@ public class PostLikeController {
 		
 		return ResponseEntity.ok (new JsonResponse ("Created like", true));
 	}
-	
+
+	/**
+	 * Uses a path parameter to find one specific post and remove the users like from that post
+	 *
+	 * @param postId The path parameter containing the id of a post
+	 * @param httpSession A session started by the user
+	 * @return A JsonResponse notifying the user the like was deleted
+	 * @throws UnauthorizedException Thrown when the user is not associated with the session
+	 * @throws InvalidValueException Thrown when the post has an invalid id
+	 * @throws NotFoundException Thrown when the post or user isn't found
+	 */
 	@DeleteMapping ("/{postId}")
 	public ResponseEntity <JsonResponse> deletePostLike (@PathVariable Integer postId, HttpSession httpSession) throws UnauthorizedException, InvalidValueException, NotFoundException {
 		User user = (User) httpSession.getAttribute ("user");

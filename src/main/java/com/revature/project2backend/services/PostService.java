@@ -78,8 +78,8 @@ public class PostService {
 	/**
 	 * Returns a Post Object with the specified id.
 	 *
-	 * @param id The id of the Post
-	 * @return A Post Object
+	 * @param id The id of the specified Post
+	 * @return A Post Object with the specific id
 	 * @throws NotFoundException
 	 */
 	public Post getPost (Integer id) throws NotFoundException {

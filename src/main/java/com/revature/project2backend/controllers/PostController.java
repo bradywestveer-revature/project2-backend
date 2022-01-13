@@ -19,21 +19,50 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * The PostController is responsible for mapping all endpoints necessary for passing data, pertaining to Posts, from
+ * the client to the server.
+ */
 @RestController
 @RequestMapping ("post")
 @CrossOrigin (origins = "${PROJECT2_FRONTEND_URL}", allowCredentials = "true")
 public class PostController {
+
+	/**
+	 * An instance of PostService used for accessing the methods in the class.
+	 */
 	private final PostService postService;
+
+	/**
+	 * An instance of PostImageService used for accessing the methods in the class.
+	 */
 	private final PostImageService postImageService;
+
+	/**
+	 * An instance of UserService used for accessing the methods in the class.
+	 */
 	private final UserService userService;
-	
+
+	/**
+	 * This Constructor initializes UserService, PostService, and PostImageService.
+	 *
+	 * @param postService An instance of PostService used for accessing the methods in the class.
+	 * @param postImageService An instance of PostImageService used for accessing the methods in the class.
+	 * @param userService An instance of UserService used for accessing the methods in the class.
+	 */
 	@Autowired
 	public PostController (PostService postService, PostImageService postImageService, UserService userService) {
 		this.postService = postService;
 		this.postImageService = postImageService;
 		this.userService = userService;
 	}
-	
+
+	/**
+	 * Validates a PostObject to ensure the body is not empty or null.
+	 *
+	 * @param post A Post Object
+	 * @throws InvalidValueException Thrown when the body is null or empty
+	 */
 	private void validatePost (Post post) throws InvalidValueException {
 		if (post.getCreator () == null || post.getBody () == null || post.getCreated () == null) {
 			throw new InvalidValueException ("Invalid post");
@@ -43,7 +72,13 @@ public class PostController {
 			throw new InvalidValueException ("Invalid post");
 		}
 	}
-	
+
+	/**
+	 * Formats a page of posts data for sending to the client.
+	 *
+	 * @param postList A List of posts that need to be formatted for the client
+	 * @return A List of formatted posts data
+	 */
 	private List <Map <String, Object>> formatPosts (List <Post> postList) {
 		List <Map <String, Object>> posts = new ArrayList <> ();
 		
@@ -53,7 +88,13 @@ public class PostController {
 		
 		return posts;
 	}
-	
+
+	/**
+	 * Formats the data in a post.
+	 *
+	 * @param postData A Post Object who data needs to be formatted
+	 * @return A Post Object with formatted data
+	 */
 	private Map <String, Object> formatPost (Post postData) {
 		Map <String, Object> post = new HashMap <> ();
 		
@@ -99,7 +140,16 @@ public class PostController {
 		
 		return post;
 	}
-	
+
+	/**
+	 * Creates and Post Object and sends it to the database
+	 *
+	 * @param body A DTO containing a List of images and a String for the body
+	 * @param httpSession A session started by the user
+	 * @return A JsonResponse notifying the user the post was created
+	 * @throws UnauthorizedException Thrown when the user is associated with the session
+	 * @throws InvalidValueException Thrown when the post body is empty and there are no images
+	 */
 	@PostMapping
 	public ResponseEntity <JsonResponse> createPost (@RequestBody CreatePostBody body, HttpSession httpSession) throws UnauthorizedException, InvalidValueException {
 		User user = (User) httpSession.getAttribute ("user");
@@ -144,7 +194,15 @@ public class PostController {
 		
 		return ResponseEntity.ok (new JsonResponse ("Created post", true));
 	}
-	
+
+	/**
+	 * Returns a page of posts. One page will contain up to a maximum of 20 posts.
+	 *
+	 * @param page The number of the page the user is trying to access
+	 * @param httpSession A session started by the user
+	 * @return A page of formatted posts up to a maximum of 20
+	 * @throws UnauthorizedException Thrown when the user is not associated with the session
+	 */
 	@GetMapping
 	public ResponseEntity <JsonResponse> getPosts (@RequestParam Integer page, HttpSession httpSession) throws UnauthorizedException {
 		if (httpSession.getAttribute ("user") == null) {
@@ -155,7 +213,17 @@ public class PostController {
 		
 		return ResponseEntity.ok (new JsonResponse ("Found " + posts.size () + " posts", true, formatPosts (posts)));
 	}
-	
+
+	/**
+	 * Returns formatted posts for a specific user. This user is not always the one currently occupying the session.
+	 *
+	 * @param userId The id of the user whose posts are being viewed.
+	 * @param page The page number that posts are being loaded on up toa maximum of 20
+	 * @param httpSession A session associated with the user.
+	 * @return A list of posts from a specific User
+	 * @throws UnauthorizedException Thrown when the user is not associated with the session
+	 * @throws NotFoundException Thrown when the user can't be found
+	 */
 	@GetMapping ("user")
 	public ResponseEntity <JsonResponse> getUserPosts (@RequestParam Integer userId, @RequestParam Integer page, HttpSession httpSession) throws UnauthorizedException, NotFoundException {
 		if (httpSession.getAttribute ("user") == null) {
@@ -168,7 +236,16 @@ public class PostController {
 		
 		return ResponseEntity.ok (new JsonResponse ("Found " + posts.size () + " posts", true, formatPosts (posts)));
 	}
-	
+
+	/**
+	 * Uses a path parameter to find one specific post.
+	 *
+	 * @param id The path parameter containing the id of a post
+	 * @param httpSession A session associated with the user.
+	 * @return A post with a specific id
+	 * @throws UnauthorizedException Thrown when the user is not associated with the session
+	 * @throws NotFoundException Thrown when the user can't be found
+	 */
 	@GetMapping ("{id}")
 	public ResponseEntity <JsonResponse> getPost (@PathVariable Integer id, HttpSession httpSession) throws UnauthorizedException, NotFoundException {
 		if (httpSession.getAttribute ("user") == null) {

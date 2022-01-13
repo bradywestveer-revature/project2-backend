@@ -12,7 +12,7 @@ import javax.persistence.*;
 /**
  * The User class contains all fields and constructors necessary for creating and testing a User Object.
  * The class utilizes Spring Data to create an All-Args and No-Args constructor. All custom constructors are for testing purposes.
- * The usage of Spring Data allows for table generation to done directly from the fields in this class, so they will be described
+ * The usage of Spring Data allows for table generation to be done directly from the fields in this class, so they will be described
  * with that in mind.
  */
 @NoArgsConstructor

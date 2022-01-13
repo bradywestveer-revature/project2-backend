@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * The Post class contains all fields and constructors necessary for creating and testing a Post Object.
  * The class utilizes Spring Data to create an All-Args and No-Args constructor. All custom constructors are for testing purposes.
- * The usage of Spring Data allows for table generation to done directly from the fields in this class, so they will be described
+ * The usage of Spring Data allows for table generation to be done directly from the fields in this class, so they will be described
  * with that in mind.
  */
 @NoArgsConstructor
@@ -53,25 +53,25 @@ public class Post {
 	private String body;
 
 	/**
-	 * This field associates
+	 * This field associates a List of images with one Post Object
 	 */
 	@OneToMany
 	private List <PostImage> images;
 
 	/**
-	 * This field sets the id of a User to a unique value that is incremented when a new User Object is added to the database.
+	 * This field associates a List of PostLike Objects with one Post Object
 	 */
 	@OneToMany
 	private List <PostLike> likes;
 
 	/**
-	 * This field sets the id of a User to a unique value that is incremented when a new User Object is added to the database.
+	 * This field associates a List of PostLike Objects with one Post Object
 	 */
 	@OneToMany
 	private List <Comment> comments;
 
 	/**
-	 * This field sets the id of a User to a unique value that is incremented when a new User Object is added to the database.
+	 * This field sets Date that the Post Object was created
 	 */
 	@Column (nullable = false)
 	@Temporal (TemporalType.TIMESTAMP)

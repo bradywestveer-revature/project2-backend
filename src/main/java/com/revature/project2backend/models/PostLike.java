@@ -9,7 +9,7 @@ import javax.persistence.*;
 /**
  * The PostLike class contains all fields and constructors necessary for creating a PostLike Object.
  * The class utilizes Spring Data to create an All-Args and No-Args constructor.
- * The usage of Spring Data allows for table generation to done directly from the fields in this class, so they will be described
+ * The usage of Spring Data allows for table generation to be done directly from the fields in this class, so they will be described
  * with that in mind.
  */
 @NoArgsConstructor
