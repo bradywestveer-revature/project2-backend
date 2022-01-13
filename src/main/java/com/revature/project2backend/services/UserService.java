@@ -65,7 +65,7 @@ public class UserService {
 	 *
 	 * @param id An Integer associated with a specific User Object
 	 * @return A User Object with the same id
-	 * @throws NotFoundException Thrown when no user is found
+	 * @throws NotFoundException Throws when a user is not found with the given id
 	 */
 	public User getUser (Integer id) throws NotFoundException {
 		User user = this.userRepo.findById (id).orElse (null);
@@ -90,7 +90,7 @@ public class UserService {
 	/**
 	 * Returns a User Object with a specific email.
 	 *
-	 * @param email A unique String associated with a specific User Object
+	 * @param email A unique email associated with a specific User Object
 	 * @return A User Object with same email
 	 */
 	public User getUserByEmail (String email) {
